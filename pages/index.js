@@ -1,17 +1,19 @@
 import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import { userAccessToken, fetchUser } from '../utils/fetchUserDetails';
 import { useRouter } from 'next/router';
 import { IoLogOut } from 'react-icons/io5';
 import { getAuth, signOut } from 'firebase/auth';
 import { app } from '../firebase';
-export default function Home() {
+
+export default function Home({ auth, accessToken }) {
   const router = useRouter();
   const [user, setUser] = useState({});
+
   const signout = () => {
     // localStorage.clear();
     // router.push('/login')
+
     const auth = getAuth(app);
     signOut(auth);
     localStorage.clear();
@@ -49,3 +51,12 @@ export default function Home() {
     </div>
   );
 }
+
+const getServerSideProps = async () => {
+  return {
+    props: {
+      auth,
+      accessToken,
+    },
+  };
+};

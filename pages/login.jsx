@@ -1,7 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
 import { FcGoogle } from 'react-icons/fc';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithPopupder,
+} from 'firebase/auth';
 import { app } from '../firebase';
 import { async } from '@firebase/util';
 import { useRouter } from 'next/router';
@@ -10,12 +15,13 @@ const login = () => {
   const provider = new GoogleAuthProvider();
   const router = useRouter();
   const signIn = async () => {
-    const { user } = await signInWithPopup(firebaseAuth, provider);
-    const { refreshToken, providerData } = user;
+    return await signInWithPopup(firebaseAuth, provider).then(({ user }) => {
+      const { refreshToken, providerData } = user;
 
-    localStorage.setItem('user', JSON.stringify(providerData));
-    localStorage.setItem('accessToken', JSON.stringify(refreshToken));
-    router.push('/');
+      localStorage.setItem('user', JSON.stringify(providerData));
+      localStorage.setItem('accessToken', JSON.stringify(refreshToken));
+      router.push('/');
+    });
   };
   return (
     <div className='relative flex items-center justify-center h-screen w-screen'>
@@ -28,7 +34,7 @@ const login = () => {
       <div
         className='flex space-x-4 p-2 border rounded-lg border-blue-400
             z-10 bg-opacity-80 bg-white hover:shadow-md hover:bg-opacity-100 
-            transition ease-out '
+            transition ease-out cursor-pointer'
         onClick={signIn}
       >
         <FcGoogle fontSize={30} />
