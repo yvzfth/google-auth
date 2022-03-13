@@ -8,7 +8,6 @@ import {
   signInWithPopupder,
 } from 'firebase/auth';
 import { app } from '../firebase';
-import { async } from '@firebase/util';
 import { useRouter } from 'next/router';
 const login = () => {
   const firebaseAuth = getAuth(app);
